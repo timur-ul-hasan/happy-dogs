@@ -1,9 +1,7 @@
 {% extends "layouts/base-fullscreen.html" %}
-
 {% block title %} Login {% endblock %}
 
 {% block content %}   
-
     <div class="auth-wrapper">
         <div class="auth-content">
             <div class="auth-bg">
@@ -29,7 +27,6 @@
 
                     <br />
                     <br />
-
                     <form role="form" method="post" action="">
 
                         {% csrf_token %}                   
@@ -49,17 +46,10 @@
                             </div>
                         </div>
                         <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
-
                     </form>
 
                     <p class="mb-0 text-muted">Don’t have an account? <a href="{% url 'register' %}" >Signup</a></p>
                     <br />
-                    <p class="mb-2 text-muted">
-                        &copy; <a target="_blank" rel="noopener noreferrer"  
-                                  href="https://codedthemes.com/?ref=appseed">CodedThemes</a> 
-                        - <a target="_blank" rel="noopener noreferrer"  
-                             href="https://appseed.us/boilerplate-code/django-dashboard">Django Boilerplate Dashboard</a>.
-                    </p>
                 </div>
             </div>
         </div>

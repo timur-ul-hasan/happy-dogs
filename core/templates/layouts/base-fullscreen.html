@@ -28,6 +28,8 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="/static/assets/css/style.css">
 
+
+    {% include 'includes/styles.html' %}
     <!-- Specific CSS goes HERE -->
     {% block stylesheets %}{% endblock stylesheets %}
 
@@ -39,6 +41,14 @@
 
     {% include 'includes/scripts.html' %}
 
+    {% block javascripts %}{% endblock javascripts %}
+
+
+    <script>
+        $('.datepicker').datepicker();
+
+
+    </script>
 </body>
 </html>
 

@@ -4,80 +4,65 @@
 
 {% block content %}   
 
-    <div class="auth-wrapper">
-        <div class="auth-content">
-            <div class="auth-bg">
-                <span class="r"></span>
-                <span class="r s"></span>
-                <span class="r s"></span>
-                <span class="r"></span>
-            </div>
-            <div class="card">
-                <div class="card-body text-center">
-                    <div class="mb-4">
-                        <i class="feather icon-user-plus auth-icon"></i>
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">Form Elements</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="javascript:">Form Componants</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:">Form Elements</a></li>
+                        </ul>
                     </div>
-                    <h3 class="mb-4">Sign up</h3>
-
-                    <span class="mb-0 text-muted">
-                        {% if msg %}
-                            {{ msg | safe }}
-                        {% else %}
-                            Add your credentials
-                        {% endif %} 
-                    </span>
-
-                    <br />
-                    <br />
-                    
-                    <!-- Hide the form on success-->
-                    {% if not success %}
-                    <form role="form" method="post" action="">
-
-                        {% csrf_token %}                    
-
-                        <div class="input-group mb-3">
-                            {{ form.username }}
-                        </div>
-                        <span class="text-error">{{ form.username.errors }}</span>
-
-                        <div class="input-group mb-3">
-                            {{ form.email }}
-                        </div>
-                        <span class="text-error">{{ form.email.errors }}</span>
-
-                        <div class="input-group mb-4">
-                            {{ form.password1 }}
-                        </div>
-                        <span class="text-error">{{ form.password1.errors }}</span>
-
-                        <div class="input-group mb-4">
-                            {{ form.password2 }}
-                        </div>
-                        <span class="text-error">{{ form.password2.errors }}</span>
-                        
-                        <div class="form-group text-left">
-                            <div class="checkbox checkbox-fill d-inline">
-                                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
-                                <label for="checkbox-fill-a1" class="cr"> Agree with <a href="#">terms</a></label>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Basic Componant</h5>
                             </div>
+                            <div class="card-body">
+                                <h5>Form controls</h5>
+                                <hr>
+                                <div class="row">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Start Date</label>
+                                                        <input type="text" class="form-control datepicker" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Select Date">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">End Date</label>
+                                                        <input type="text" class="form-control datepicker" id="exampleInputPassword1" placeholder="Select Date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                </div>
+                            </div>        
                         </div>
-                        <button type="submit" name="register" class="btn btn-primary shadow-2 mb-4">Register</button>
-
-                    </form>
-                    {% endif %}
-                    
-                    <p class="mb-0 text-muted">Already have an account? <a href="{% url 'login' %}" >Login</a></p>
-                    <br />
-                    <p class="mb-2 text-muted">
-                        &copy; <a target="_blank" rel="noopener noreferrer"  
-                                  href="https://codedthemes.com/?ref=appseed">CodedThemes</a> 
-                        - <a target="_blank" rel="noopener noreferrer" 
-                             href="https://appseed.us/boilerplate-code/django-dashboards">Django Boilerplate Dashboard</a>
-                    </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 {% endblock content %}

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import (
-    Dog
+    Dog,
+    Visit
 )
 
 # Register your models here.
@@ -8,3 +9,8 @@ from .models import (
 @admin.register(Dog)
 class DogAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Visit)
+class VisitAdmin(admin.ModelAdmin):
+    pass
+
