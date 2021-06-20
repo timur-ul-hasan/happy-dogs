@@ -1,40 +1,40 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from datetime import datetime, timezone, timedelta
 from django import template
-from .models import (Dog,Visit)
+from .models import (Dog, Visit)
 from factory.faker import faker
 import factory
 import random
 from django.db import connection
 from django.core import serializers
-from django.db.models import CharField,DateField, Value
+from django.db.models import CharField, DateField, Value
 import json
 
 
 DAY_OF_WEEKS = {
-    0 : "MONDAY",
-    1 : "TUESDAY",
-    2 : "WEDNESDAY",
-    3 : "THURSDAY",
-    4 : "FRIDAY",
-    5 : "SATURDAY",
-    6 :  "SUNDAY"
+    0: "MONDAY",
+    1: "TUESDAY",
+    2: "WEDNESDAY",
+    3: "THURSDAY",
+    4: "FRIDAY",
+    5: "SATURDAY",
+    6:  "SUNDAY"
 }
 
 
 def visit_weeks():
     return {
-        "MONDAY" : [],
-        "TUESDAY" : [],
-        "WEDNESDAY" : [],
-        "THURSDAY" : [],
-        "FRIDAY" : [],
-        "SATURDAY" : [],
-        "SUNDAY" : []        
-    } 
+        "MONDAY": [],
+        "TUESDAY": [],
+        "WEDNESDAY": [],
+        "THURSDAY": [],
+        "FRIDAY": [],
+        "SATURDAY": [],
+        "SUNDAY": []
+    }
 
 
 def structure_visits_data():
@@ -51,40 +51,46 @@ def structure_visits_data():
         day = starting_day + timedelta(days=i)
         weekday = day.weekday()
         weekday_text = DAY_OF_WEEKS[weekday]
-  
-        current_date=Value(day, output_field=DateField())
-        visits = list(Visit.objects.filter(start_date__lte=day,end_date__gte=day).annotate(day=current_date).values())
 
+        current_date = Value(day, output_field=DateField())
+        visits = list(Visit.objects.filter(start_date__lte=day,
+                      end_date__gte=day).annotate(day=current_date).values())
         if weekday == 0:
-            weekday_data["MONDAY"] = visits
+            weekday_data["MONDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 3:
-            weekday_data["TUESDAY"] = visits
+            weekday_data["TUESDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 2:
-            weekday_data["WEDNESDAY"] = visits
+            weekday_data["WEDNESDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 3:
-            weekday_data["THURSDAY"] = visits
+            weekday_data["THURSDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 4:
-            weekday_data["FRIDAY"] = visits
+            weekday_data["FRIDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 5:
-            weekday_data["SATURDAY"] = visits
+            weekday_data["SATURDAY"] = { "day" : day  , "data" :  visits }
         if weekday == 6:
-            weekday_data["SUNDAY"] = visits
-            for d in DAY_OF_WEEKS.values():
-                if weekday_data.get(d,None) == None:
-                    weekday_data[d] = []
+            weekday_data["SUNDAY"] = { "day" : day  , "data" :  visits }
+            weekdays_list = DAY_OF_WEEKS.values()
+            count = 0
+            for d in weekdays_list:
+                if weekday_data.get(d, None) == None:
+                    weekday_data[d] = { "day" : day - timedelta(days = (6 - count)) , "data" :  [] }
+                count = count+1
             data.append(weekday_data)
             weekday_data = {}
     return data
 
 
 FAKER = faker.Faker()
+
+
 @login_required(login_url="/login/")
 def index(request):
     context = {}
     context['segment'] = 'index'
 
-    html_template = loader.get_template( 'index.html' )
+    html_template = loader.get_template('index.html')
     return HttpResponse(html_template.render(context, request))
+
 
 @login_required(login_url="/login/")
 def pages(request):
@@ -92,22 +98,23 @@ def pages(request):
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
-        
-        load_template      = request.path.split('/')[-1]
+
+        load_template = request.path.split('/')[-1]
         context['segment'] = load_template
-        
-        html_template = loader.get_template( load_template )
+
+        html_template = loader.get_template(load_template)
         return HttpResponse(html_template.render(context, request))
-        
+
     except template.TemplateDoesNotExist:
 
-        html_template = loader.get_template( 'page-404.html' )
+        html_template = loader.get_template('page-404.html')
         return HttpResponse(html_template.render(context, request))
 
     except:
-    
-        html_template = loader.get_template( 'page-500.html' )
+
+        html_template = loader.get_template('page-500.html')
         return HttpResponse(html_template.render(context, request))
+
 
 def visits(request):
     context = {}
@@ -115,8 +122,9 @@ def visits(request):
 
     data = structure_visits_data()
 
-    html_template = loader.get_template( 'visits/index.html' )
-    return JsonResponse(data=data,safe=False)
+    html_template = loader.get_template('visits/index.html')
+    return JsonResponse(data=data, safe=False)
+
 
 def visit_page(request):
     context = {}
@@ -124,9 +132,9 @@ def visit_page(request):
     context["data"] = data
     context['segment'] = 'index'
 
-
-    html_template = loader.get_template( 'visits/index.html' )
+    html_template = loader.get_template('visits/index.html')
     return HttpResponse(html_template.render(context, request))
+
 
 def populate_db(request):
     cursor = connection.cursor()
@@ -136,8 +144,9 @@ def populate_db(request):
     cursor.execute("VACUUM ;")
     cursor.execute("PRAGMA foreign_keys = 1;")
 
-    today = datetime.now(tz=timezone.utc).replace(hour=00, minute=00, second=0, microsecond=0)
-    
+    today = datetime.now(tz=timezone.utc).replace(
+        hour=00, minute=00, second=0, microsecond=0)
+
     for i in range(365):
         try:
             Dog.objects.create(
@@ -152,13 +161,13 @@ def populate_db(request):
         try:
             Visit.objects.create(
                 dog=Dog.objects.order_by('?')[0],
-                start_date = start_date,
-                end_date = end_date,
+                start_date=start_date,
+                end_date=end_date,
             )
         except:
             pass
     context = {}
     context['segment'] = 'index'
 
-    html_template = loader.get_template( 'visits/populate-db.html' )
+    html_template = loader.get_template('visits/populate-db.html')
     return HttpResponse(html_template.render(context, request))
