@@ -6,6 +6,7 @@ urlpatterns = [
     # The home page
     path('', views.index, name='home'),
     path('visits/', views.visits, name="visits"),
+    path('populate-db/', views.populate_db, name="populate-db"),
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),
 
