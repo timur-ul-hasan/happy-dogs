@@ -11,6 +11,7 @@ import random
 from django.db import connection
 from django.core import serializers
 from django.db.models import CharField, DateField, Value
+from dateutil.parser import parse
 import json
 
 
@@ -37,18 +38,23 @@ def visit_weeks():
     }
 
 
-def structure_visits_data():
+def structure_visits_data(start_date=None,end_date=None):
     data = []
-    minimum_date = Visit.objects.all().order_by('start_date').first()
+    minimum_date =  Visit.objects.all().order_by('start_date').first()
     maximum_date = Visit.objects.all().order_by('-end_date').first()
+
+    starting_day = minimum_date.start_date
+    ending_day = maximum_date.end_date
+
+    if start_date:
+        starting_day = start_date
+    if end_date:
+        ending_day = end_date
 
     if not minimum_date or not maximum_date:
         return []
 
-    delta = maximum_date.end_date - minimum_date.start_date
-
-    starting_day = minimum_date.start_date
-    ending_day = maximum_date.end_date
+    delta = ending_day - starting_day
 
     weekday_data = {}
     for i in range(delta.days):
@@ -132,7 +138,17 @@ def visits(request):
 
 def visit_page(request):
     context = {}
-    data = structure_visits_data()
+    start_date = request.GET.get('start_date',None)
+    end_date = request.GET.get('end_date',None) 
+
+
+    # minimum_date = Visit.objects.all().order_by('start_date').first()
+    # maximum_date = Visit.objects.all().order_by('-end_date').first()
+
+    start_date = parse(start_date) if start_date else None
+    end_date = parse(end_date) if end_date else None
+
+    data = structure_visits_data(start_date=start_date,end_date=end_date )
     context["data"] = data
     context['segment'] = 'index'
 
