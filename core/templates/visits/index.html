@@ -57,8 +57,92 @@
                                 </div>
                             </div>        
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- [ basic-table ] start -->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Visits Record</h5>
+                            </div>
+                            <div class="card-block table-border-style">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Monday</th> 
+                                                <th>Tuesday</th> 
+                                                <th>Wednesday</th> 
+                                                <th>Thursday</th> 
+                                                <th>Friday</th> 
+                                                <th>Saturday</th> 
+                                                <th>Sunday</th>   
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for record in data %}
+                                                <tr>
+                                                    <td>
+                                                        {% for day_data in record.MONDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+                                                    <td>
+                                                        {% for day_data in record.TUESDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+                                                    <td>
+                                                        {% for day_data in record.WEDNESDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+                                                    <td>
+                                                        {% for day_data in record.THURSDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+
+                                                    <td>
+                                                        {% for day_data in record.FRIDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+
+                                                    <td>
+                                                        {% for day_data in record.SATURDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+                                                    <td>
+                                                        {% for day_data in record.SUNDAY %}
+                                                            <div>
+                                                                <p>Dog ID :{{ day_data.id}}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </td> 
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- [ basic-table ] end -->
                 </div>
             </div>
         </div>

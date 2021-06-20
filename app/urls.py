@@ -4,7 +4,8 @@ from app import views
 urlpatterns = [
 
     # The home page
-    path('', views.index, name='home'),
+    path('dashboard/', views.index, name='home'),
+    path('', views.visit_page, name='home'),
     path('visits/', views.visits, name="visits"),
     path('populate-db/', views.populate_db, name="populate-db"),
     # Matches any html file
