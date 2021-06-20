@@ -37,3 +37,10 @@ def pages(request):
     
         html_template = loader.get_template( 'page-500.html' )
         return HttpResponse(html_template.render(context, request))
+
+def visits(request):
+    context = {}
+    context['segment'] = 'index'
+
+    html_template = loader.get_template( 'visits/index.html' )
+    return HttpResponse(html_template.render(context, request))
