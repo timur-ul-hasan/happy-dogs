@@ -41,6 +41,10 @@ def structure_visits_data():
     data = []
     minimum_date = Visit.objects.all().order_by('start_date').first()
     maximum_date = Visit.objects.all().order_by('-end_date').first()
+
+    if not minimum_date or not maximum_date:
+        return []
+
     delta = maximum_date.end_date - minimum_date.start_date
 
     starting_day = minimum_date.start_date
