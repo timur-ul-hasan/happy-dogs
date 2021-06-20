@@ -8,6 +8,8 @@ from .models import (Dog,Visit)
 from factory.faker import faker
 import factory
 import random
+from django.db import connection
+
 
 FAKER = faker.Faker()
 @login_required(login_url="/login/")
@@ -51,9 +53,17 @@ def visits(request):
 
 
 def populate_db(request):
+    cursor = connection.cursor()
+    cursor.execute("PRAGMA foreign_keys = 0;")
+    cursor.execute("DELETE FROM app_dog;")
+    cursor.execute("DELETE FROM app_visit;")
+    cursor.execute("VACUUM ;")
+    cursor.execute("PRAGMA foreign_keys = 1;")
+
     today = datetime.now(tz=timezone.utc).replace(hour=00, minute=00, second=0, microsecond=0)
-    Dog.objects.all().delete()
-    Visit.objects.all().delete()
+    
+    
+
     for i in range(365):
         try:
             Dog.objects.create(
