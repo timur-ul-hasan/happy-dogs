@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from datetime import datetime, timezone, timedelta
 from django import template
 from .models import (Dog,Visit)
+from factory.faker import faker
+import factory
+import random
 
-
+FAKER = faker.Faker()
 @login_required(login_url="/login/")
 def index(request):
     
@@ -49,18 +52,29 @@ def visits(request):
 
 def populate_db(request):
     today = datetime.now(tz=timezone.utc).replace(hour=00, minute=00, second=0, microsecond=0)
+    Dog.objects.all().delete()
+    Visit.objects.all().delete()
     for i in range(365):
-        Dog.create()
-
-
-
+        try:
+            Dog.objects.create(
+                first_name=FAKER.first_name(),
+                last_name=FAKER.last_name(),
+            )
+        except:
+            print("Unique Constraint Failed")
     for i in range(365):
-
-
-        print(i)
-
+        start_date = today + timedelta(days=random.randint(1, 365))
+        end_date = start_date + timedelta(days=random.randint(2, 365))
+        try:
+            Visit.objects.create(
+                dog=Dog.objects.order_by('?')[0],
+                start_date = start_date,
+                end_date = end_date,
+            )
+        except:
+            pass
     context = {}
     context['segment'] = 'index'
 
-    html_template = loader.get_template( 'visits/index.html' )
+    html_template = loader.get_template( 'visits/populate-db.html' )
     return HttpResponse(html_template.render(context, request))
